@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<title>Code 4</title>
+		<script type="text/javascript" src="d3.v3.js"></script>
+		<style type="text/css">
+			/*  */		
+		</style>
+	</head>
+	<body>
+
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	<div></div>
+	
+	
+	
+	
+		<script type="text/javascript">
+			var dataset = [ 5, 10, 15, 20, 25 ];
+			d3.select("body")
+			.selectAll("p") 
+			.data(dataset) 
+			.enter() 
+			.append("p") 
+			.text("New paragraph!");
+			
+
+			d3.select("body")
+			.selectAll("div") 
+			.data(dataset) 
+			//.enter() 
+			.append("div")
+			.text(function(d) { return d; })
+			.style("color", function(d) { 
+				if (d > 15) { 
+				return "red"; } 
+				else { return "black"; } 
+			});
+
+			setTimeout( function(){
+				var dataset = [ 25,20,15 ];
+				d3.select("body")
+				.selectAll("div") 
+				.data(dataset) 
+				.text(function(d) { return d; })
+				.style("color", function(d) { 
+					if (d > 15) {  
+					return "green"; } 
+					else { return "blue"; } 
+				});			
+			}, 2500 )
+			
+			var svg = d3.select("body") .append("svg") .attr("width", 500) .attr("height", 500);
+			var circles = svg
+				.selectAll("circle")
+				.data(dataset)
+				.enter()
+				.append("circle");
+				
+			circles.attr("cx", function(d, i) { return (i * 50) + 50; }) 
+			.attr("cy", 50) 
+			.attr("r", function(d) { return d; })
+			.attr("fill", "yellow")
+			.attr("stroke", "orange")
+			.attr("stroke-width", function(d) { return d/2; });
+
+
+			var svg = d3.select("body") .append("svg") .attr("width", 500) .attr("height", 500);
+			var data = [ { "x": 10,   "y": 8},  { "x": 20,  "y": 30},
+                  { "x": 30,  "y": 25}, { "x": 40,  "y": 30},
+                  { "x": 50,  "y": 10},  { "x": 60, "y": 5}];
+ 
+
+			var line = d3.svg.line()
+						  .x(function(d) { return d.x; })
+						  .y(function(d) { return d.y; });
+
+
+			var lines = svg.append("path")
+							.attr("stroke", "blue")
+							.attr("stroke-width", 2)
+							.attr("fill", "none")
+							.attr("d", line(data));			
+			
+						
+		</script>
+	</body>
+</html>

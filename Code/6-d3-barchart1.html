@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<title>Code 6</title>
+		<script type="text/javascript" src="d3.v3.js"></script>
+		<style type="text/css">
+		
+			div.bar {
+				display: inline-block;
+				width: 10px;
+				height: 100px;	
+				margin-right: 2px;
+				background-color: blue;
+			}
+		
+		</style>
+
+	</head>
+	<body>
+
+		<div id="divbar" >
+		</div>
+		<div class="svgbar" >
+		</div>
+		
+		<script type="text/javascript">
+			var dataset = [ 15, 7, 8, 9, 20, 15, 10, 13, 30] ;
+			w=200;
+			h=200;
+			
+			d3.select("#divbar").selectAll("div")
+				.data(dataset)
+				.enter()
+				.append("div")
+				.attr("class", "bar")
+				.style("height", function(d) {
+					var barHeight = d * 5;
+					return barHeight + "px";
+				});
+
+			var svg = d3.select(".svgbar")
+			.append("svg")
+			.attr("width", w)
+			.attr("height", h);	
+			
+			var scale=d3.scale.linear().domain([0,200]).range([200,0])
+			
+			
+			svg.selectAll("rect")
+				.data(dataset)
+				.enter()
+				.append("rect")
+				.attr("fill", "blue")
+			    .attr("y", function(d) {return scale(d*5) +"px";})
+				/*.attr("y", function(d) {
+					var ypos = h - d * 5 ;
+					return ypos + "px";
+				})*/
+				.attr("x", function(d, i) {
+					var xpos = i * (10 + 2);
+					return xpos + "px";
+				})
+				.attr("width", 10)
+				.attr("height", function(d) {
+					var barHeight = d * 5;
+					return barHeight + "px";
+				});
+				
+var axis = d3.svg.axis().scale(scale).orient("left");
+svg.append("g").call(axis);
+				
+		</script>		
+	</body>
+</html>

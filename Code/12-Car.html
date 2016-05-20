@@ -1,0 +1,269 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<title>Code car</title>
+		<script type="text/javascript" src="d3.v3.js"></script>
+		<style type="text/css">
+			/*  */		
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+var w = 1500;
+var h = 800;
+var pw = 600;
+var ph = 400;
+var margin = {top: 20, right: 80, bottom: 30, left: 60},
+pws = pw - margin.left - margin.right,
+phs = ph - margin.top - margin.bottom;
+
+var year = 2014;
+var slideValue = 2;
+
+var nbVehic = [
+	{name:"chariotsElec", 
+	values : [{year:2012, val:780},{year:2013, val:780},{year:2014, val:780} ] },
+	{name:"Velo", 
+	values : [{year:2012, val:19573},{year:2013, val:29971},{year:2014, val:26796} ] },
+	{name:"VeloElec", 
+	values : [{year:2012, val:11244},{year:2013, val:16236},{year:2014, val:18476} ] },
+	{name:"2Roues", 
+	values : [{year:2012, val:13864},{year:2013, val:11941},{year:2014, val:9445} ] },	
+	{name:"2Roueselec", 
+	values : [{year:2012, val:0},{year:2013, val:0},{year:2014, val:0} ] },	
+	{name:"Quad", 
+	values : [{year:2012, val:611},{year:2013, val:1051},{year:2014, val:1343} ] },	
+	{name:"QuadElec", 
+	values : [{year:2012, val:602},{year:2013, val:1041},{year:2014, val:1327} ] },	
+	{name:"VL", 
+	values : [{year:2012, val:54208},{year:2013, val:54380},{year:2014, val:52887} ] },	
+	{name:"VLElec", 
+	values : [{year:2012, val:1549},{year:2013, val:3679},{year:2014, val:4621} ] },
+	{name:"PL", 
+	values : [{year:2012, val:331},{year:2013, val:334},{year:2014, val:334} ] },	
+	{name:"PLELec", 
+	values : [{year:2012, val:0},{year:2013, val:0},{year:2014, val:0} ] },	
+	{name:"Staby", 
+	values : [{year:2012, val:0},{year:2013, val:0},{year:2014, val:100} ] },	
+	{name:"StabyElec", 
+	values : [{year:2012, val:0},{year:2013, val:0},{year:2014, val:100} ] },	
+];		
+		
+	var popupSvg = d3.select("body")
+			.append("svg")
+			.attr("width", pw)
+			.attr("height", ph);
+	
+//defintion du fond
+	var defs = popupSvg.append("defs");					
+	var pattern2 = defs.append("pattern")
+		.attr({ id:"img1", width:"1600", height:"600", patternUnits:"userSpaceOnUse", patternTransform:"rotate(180)"});
+	image = pattern2.append("image")
+		.attr({"xlink:href":"fond.jpg", x:"0", y:"0", width:"1600", height:"600"});			
+	
+	var buttonColor = defs.append("linearGradient")
+		.attr({id:"grad1",x1:"0%",y1:"0%",x2:"0%",y2:"100%"});
+	buttonColor.append("stop")
+		.attr("offset","0%")
+		.style("stop-color","#0088cc")
+		.style("stop-opacity",1);
+	buttonColor.append("stop")
+		.attr("offset","100%")
+		.style("stop-color","#0044cc")
+		.style("stop-opacity",1);	
+
+	var buttonColor2 = defs.append("linearGradient")
+		.attr({id:"grad2",x1:"0%",y1:"0%",x2:"0%",y2:"100%"});
+	buttonColor2.append("stop")
+		.attr("offset","0%")
+		.style("stop-color","#005fbf")
+		.style("stop-opacity",1);
+	buttonColor2.append("stop")
+		.attr("offset","100%")
+		.style("stop-color","#003f7f")
+		.style("stop-opacity",1);			
+		
+	
+	var group1 = popupSvg.append("g").attr("id","layer1").attr("transform","matrix(-0.6874148,0,0,1,540.5033,125)").attr("fill", "url(#img1)")	;
+	var group2 = popupSvg.append("g").attr("id","layer2").attr("transform","matrix(-0.6874148,0,0,1,540.5033,125)");			
+
+	
+	
+	
+	
+//dessin de la voiture	
+	path ="M 640.23853,222.03787 C 640.23853,249.14264 618.26578,271.11539 591.16101,271.11539 C 564.05624,271.11539 542.08349,249.14264 542.08349,222.03787 C 542.08349,194.9331 564.05624,172.96035 591.16101,172.96035 C 618.26578,172.96035 640.23853,194.9331 640.23853,222.03787 L 640.23853,222.03787 z";
+	group2.append("path") 
+		.attr("d", path)
+		.attr("fill", "lightgrey")	
+		.attr("transform","matrix(1.079545,0,0,1.079545,-521.3741,-27.12071)");	
+	path ="M 285.83418,10.247082 C 288.65554,6.9807461 291.87058,4.1737036 297.80466,4.5388804 L 554.11195,4.5388804 L 681.49562,105.68157 C 682.90126,108.65248 683.61253,110.92902 683.96915,112.85091 L 684.45326,202.47755 C 682.08558,207.61498 679.30008,212.00034 674.33227,212.45753 L 644.76683,212.45753 C 644.76683,124.83077 515.22193,124.6518 515.22193,212.45753 L 182.38817,212.45753 C 182.38817,125.17065 51.857393,124.83574 51.857393,212.45753 L 15.791737,212.45753 C 12.71653,211.01909 9.9497784,212.35674 5.8866518,202.02701 L 5.492299,137.57457 C 7.5896054,131.71045 10.205427,129.47594 12.815364,127.20023 L 200.16379,96.077198 L 285.83418,10.247082 z ";
+	group1.append("path") 
+		.attr("d", path)
+		//.attr("fill", "yellow")
+		;	
+	path ="M 640.23853,222.03787 C 640.23853,249.14264 618.26578,271.11539 591.16101,271.11539 C 564.05624,271.11539 542.08349,249.14264 542.08349,222.03787 C 542.08349,194.9331 564.05624,172.96035 591.16101,172.96035 C 618.26578,172.96035 640.23853,194.9331 640.23853,222.03787 L 640.23853,222.03787 z ";
+	group2.append("path") 
+		.attr("d", path)
+		.attr("fill", "lightgrey")		
+		.attr("transform","matrix(1.079545,0,0,1.079545,-58.73586,-27.14299)");	
+	path ="M 226.41173,97.07302 L 290.25519,34.075171 C 291.69464,32.851906 292.82676,31.167654 295.32884,31.538345 L 408.85181,31.538345 L 408.85181,108.70014 L 231.27398,108.70014 C 224.51388,106.03369 223.59914,101.99187 226.41173,97.07302 z ";
+	group2.append("path") 
+		.attr("d", path)
+		.attr("fill", "white");					
+	path ="M 585.23723,89.186408 L 530.52565,34.0864 C 529.0862,32.863135 527.95408,31.178883 525.452,31.549574 L 429.94598,31.549574 L 429.94598,108.71136 L 592.71536,108.71136 C 600.41757,107.17544 590.2821,96.783985 585.23723,89.186408 z ";
+	group2.append("path") 
+		.attr("d", path)
+		.attr("fill", "white");	
+
+		//0 = tout gris, 800=tt vert VL 7 et VL elec 8
+var Tx = [];
+Tx[0] = 100*nbVehic[8].values[0].val/nbVehic[7].values[0].val;
+Tx[1] = 100*nbVehic[8].values[1].val/nbVehic[7].values[1].val;
+Tx[2] = 100*nbVehic[8].values[2].val/nbVehic[7].values[2].val;
+
+Tx[3] = 100*nbVehic[8].values[0].val/9314;
+Tx[4] = 100*nbVehic[8].values[1].val/(9314+13954);
+Tx[5] = 100*nbVehic[8].values[2].val/(9314+13954+15046);
+
+
+var yearSelect = 0;
+var typeSelect = 0;
+
+Txinit = (100*nbVehic[8].values[yearSelect].val/nbVehic[7].values[yearSelect].val);
+TxCommentText = " % de véhicules légers électriques au sein de La Poste";
+var TxText = popupSvg.append("g")
+	.append("text")
+      .attr("x", pw/2)
+	  .attr("y", 100)
+      .style("text-anchor", "middle")
+	  .attr("class", "textGraph")
+	  .attr("fill","#3366FF")
+      .text(Txinit.toFixed(2) + TxCommentText);
+
+
+	
+		
+  var button1 = popupSvg.append("g")
+	.attr("transform","translate(30,10)");
+	button1.append("rect")
+		.attr({x:0,y:0,rx:5,ry:5,width: 250, height: 30,fill:"url(#grad2)"});
+    button1.append("text")
+      .attr("dy", "1.5em")
+	  .attr("dx", "2px")
+	  .attr("fill","white")
+      .style("text-anchor", "start")
+	  .style("font-family","Helvetica")
+      .text("Taux de véhicule électrique à xxx");
+	button1.on("click",function() {
+		typeSelect=0;
+		TxCommentText = " % de véhicules légers électriques";
+		button1.select("rect").attr("fill","url(#grad2)");
+		button2.select("rect").attr("fill","url(#grad1)");
+		image.transition()
+				.duration(1000)
+				.attr("x", 110 +Math.round(6.80* Tx[yearSelect+typeSelect]) );
+		Txinit = Tx[yearSelect+typeSelect];
+		TxText.text(Txinit.toFixed(2) + TxCommentText);			
+	});
+	  
+  var button2 = popupSvg.append("g")
+	.attr("transform","translate(300,10)");
+	button2.append("rect")
+		.attr({x:0,y:0,rx:5,ry:5,width: 270, height: 30,fill:"url(#grad1)"});
+    button2.append("text")
+      .attr("dy", "1.5em")
+	  .attr("dx", "2px")
+	  .attr("fill","white")
+      .style("text-anchor", "start")
+      .text("Part de xxx dans le parc électrique");	  
+	button2.on("click",function() {
+		typeSelect=3;
+		TxCommentText = " % des véhicules légers électriques en France appartiennent à xxxx";
+		button2.select("rect").attr("fill","url(#grad2)");
+		button1.select("rect").attr("fill","url(#grad1)");
+		image.transition()
+				.duration(1000)
+				.attr("x", 110 +Math.round(6.80* Tx[yearSelect+typeSelect]) );
+		Txinit = Tx[yearSelect+typeSelect] ;
+		TxText.text(Txinit.toFixed(2) + TxCommentText);		
+		
+	});
+
+	  
+var year1 = popupSvg.append("g").attr("class","fondYear")
+	.attr("transform","translate(215,50)");
+	year1.append("rect")
+		.attr({x:0,y:0,rx:5,ry:5,width: 50, height: 30,fill:"url(#grad2)"});
+    year1.append("text")
+      .attr("dy", "1.5em")
+	  .attr("dx", "7px")
+	  .attr("fill","white")
+      .style("text-anchor", "start")
+      .text("2012");	
+	year1.on("click",function() {
+		yearSelect=0;
+		d3.selectAll(".fondYear rect").attr("fill","url(#grad1)");
+		year1.select("rect").attr("fill","url(#grad2)");		
+		image.transition()
+				.duration(1000)
+				.attr("x", 110 +Math.round(6.80* Tx[yearSelect+typeSelect]) );
+		Txinit = Tx[yearSelect+typeSelect] ;
+		TxText.text(Txinit.toFixed(2) + TxCommentText);			
+	});
+
+	  
+var year2 = popupSvg.append("g").attr("class","fondYear")
+	.attr("transform","translate(275,50)");
+	year2.append("rect")
+		.attr({x:0,y:0,rx:5,ry:5,width: 50, height: 30,fill:"url(#grad1)"});
+    year2.append("text")
+      .attr("dy", "1.5em")
+	  .attr("dx", "7px")
+	  .attr("fill","white")
+      .style("text-anchor", "start")
+      .text("2013");
+	year2.on("click",function() {
+		yearSelect=1;
+		d3.selectAll(".fondYear rect").attr("fill","url(#grad1)");
+		year2.select("rect").attr("fill","url(#grad2)");		
+		image.transition()
+				.duration(1000)
+				.attr("x", 110 +Math.round(6.80* Tx[yearSelect+typeSelect]) );
+		Txinit = Tx[yearSelect+typeSelect] ;
+		TxText.text(Txinit.toFixed(2) + TxCommentText);			
+	});
+	  
+var year3 = popupSvg.append("g").attr("class","fondYear")
+	.attr("transform","translate(335,50)");
+	year3.append("rect")
+		.attr({x:0,y:0,rx:5,ry:5,width: 50, height: 30,fill:"url(#grad1)"});
+    year3.append("text")
+      .attr("dy", "1.5em")
+	  .attr("dx", "7px")
+	  .attr("fill","white")
+      .style("text-anchor", "start")
+      .text("2014");	  
+	year3.on("click",function() {
+		yearSelect=2;
+		d3.selectAll(".fondYear rect").attr("fill","url(#grad1)");
+		year3.select("rect").attr("fill","url(#grad2)");		
+		image.transition()
+				.duration(1000)
+				.attr("x", 110 +Math.round(6.80* Tx[yearSelect+typeSelect]) );
+		Txinit = Tx[yearSelect+typeSelect] ;
+		TxText.text(Txinit.toFixed(2) + TxCommentText);			
+	});
+
+	  
+//decalage du fond à la bonne place	
+	setTimeout( function(){
+		image.transition()
+				.duration(1000)
+				.attr("x", 110 +Math.round(6.80* Tx[yearSelect+typeSelect]));
+	}, 1000 )
+
+		</script>
+	</body>
+</html>
